@@ -10,3 +10,5 @@ export enum TaskStatus {
     IN_PROGRESS = "in_progress",
     DONE = "done"
 }
+
+// for connecting to a database we need npm install typeorm @nestjs/typeorm pg

@@ -5,9 +5,9 @@ export class CreateTaskDto {
     @IsNotEmpty() private title: string
     @IsNotEmpty() private description: string
 
-    constructor(private _title: string, private _description: string) {
-        this.title = _title;
-        this.description = _description
+    constructor(title: string, description: string) {
+        this.title = title;
+        this.description = description
     }
 }
 

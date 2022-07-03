@@ -2,10 +2,10 @@ import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from '@nestjs/
 import {TasksService} from "../tasks-service/tasks.service";
 import {TaskStatus} from "../model/entity/TaskEntity";
 import {CreateTaskDto} from "../model/dto/CreateTaskDto";
-import {taskDtoToEntity, taskEntityToCreateDto, taskEntityToTaskDto, taskEntityToUpdateDto} from "../mapper/TaskMapper";
+import {taskDtoToEntity, taskEntityToCreateDto, taskEntityToTaskDto} from "../mapper/TaskMapper";
 import {GetFilterTaskDto} from "../model/dto/GetFilterTaskDto";
-import {UpdateTaskDto} from "../model/dto/UpdateTaskDto";
 import {TaskDto} from "../model/dto/TaskDto";
+import {UpdateTaskDto} from "../model/dto/UpdateTaskDto";
 
 @Controller('tasks')
 export class TasksController {
@@ -40,8 +40,9 @@ export class TasksController {
     }
 
     @Patch("/:id/status")
-    updateTaskStatus(id: string, @Body('status')status: TaskStatus): UpdateTaskDto {
-        return taskEntityToUpdateDto(this.taskService.updateTaskStatus(id, status))
+    updateTaskStatus(id: string, @Body() updateTaskStatus: UpdateTaskDto): TaskDto {
+        const { status } = updateTaskStatus
+        return taskEntityToTaskDto(this.taskService.updateTaskStatus(id, status))
     }
 
 

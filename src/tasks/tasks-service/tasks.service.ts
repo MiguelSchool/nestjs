@@ -1,8 +1,9 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {TaskEntity, TaskStatus} from "../model/entity/TaskEntity";
 import {CreateTaskDto} from "../model/dto/CreateTaskDto";
-import {taskDtoToEntity, taskEntityToCreateDto, taskEntityToTaskDto, taskEntityToUpdateDto} from "../mapper/TaskMapper";
+import {taskDtoToEntity, taskEntityToCreateDto} from "../mapper/TaskMapper";
 import {GetFilterTaskDto} from "../model/dto/GetFilterTaskDto";
+import {IsEnum} from "class-validator";
 
 @Injectable()
 export class TasksService {
@@ -16,13 +17,15 @@ export class TasksService {
         return task
     }
 
-    saveAllTasks( tasks: CreateTaskDto[] ) : CreateTaskDto[] {
+    saveAllTasks( tasks: CreateTaskDto[] ) : TaskEntity[] {
         tasks.forEach(dto => this.tasks.push(taskDtoToEntity(dto)))
-        return this.tasks.map(entity => taskEntityToCreateDto(entity))
+        return this.tasks
     }
 
     getTask( id : string ) : TaskEntity {
-        return  this.tasks.find(task => task.id === id)
+        const temp = this.tasks.find(task => task.id === id)
+        if(!temp) throw new NotFoundException()
+        else return temp
     }
 
     getAllTasks() : TaskEntity[] {
@@ -30,8 +33,10 @@ export class TasksService {
     }
 
     removeTask(id: string) : void {
+        this.getTask(id)
         this.tasks = this.tasks.filter(entity => entity.id !== id)
     }
+
 
     updateTaskStatus(id: string, status : TaskStatus) : TaskEntity {
         const entity: TaskEntity = this.getTask(id)
