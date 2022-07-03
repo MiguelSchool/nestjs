@@ -1,6 +1,3 @@
-import {TaskStatus} from "../entity/TaskEntity";
+import {TaskDto} from "./TaskDto";
 
-export class UpdateTaskDto {
-    constructor(private title: string, private description: string, private status: TaskStatus) {
-    }
-}
+export class UpdateTaskDto extends TaskDto{ }

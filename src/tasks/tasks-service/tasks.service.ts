@@ -3,8 +3,7 @@ import {TaskEntity, TaskStatus} from "../model/entity/TaskEntity";
 import {CreateTaskDto} from "../model/dto/CreateTaskDto";
 import {taskDtoToEntity, taskEntityToCreateDto, taskEntityToTaskDto, taskEntityToUpdateDto} from "../mapper/TaskMapper";
 import {GetFilterTaskDto} from "../model/dto/GetFilterTaskDto";
-import {UpdateTaskDto} from "../model/dto/UpdateTaskDto";
-import {TaskDto} from "../model/dto/TaskDto";
+
 @Injectable()
 export class TasksService {
 
@@ -22,49 +21,40 @@ export class TasksService {
         return this.tasks.map(entity => taskEntityToCreateDto(entity))
     }
 
-    getTask( id : string ) : CreateTaskDto {
-        const entity = this.tasks.find(task => task.id === id)
-        return taskEntityToCreateDto(entity)
+    getTask( id : string ) : TaskEntity {
+        return  this.tasks.find(task => task.id === id)
     }
 
-    getAllTasks() : TaskDto[] {
-       const temp = this.tasks.map(entity => taskEntityToTaskDto(entity))
-        console.log('getTasks',temp)
-        return temp
+    getAllTasks() : TaskEntity[] {
+        return this.tasks
     }
 
     removeTask(id: string) : void {
         this.tasks = this.tasks.filter(entity => entity.id !== id)
     }
 
-    updateTaskStatus(id: string, status : TaskStatus) : UpdateTaskDto {
-        const entity: TaskEntity = this.tasks.find(task => task.id === id)
+    updateTaskStatus(id: string, status : TaskStatus) : TaskEntity {
+        const entity: TaskEntity = this.getTask(id)
         const index = this.tasks.indexOf(entity)
-        console.log('entity update',entity)
         const upgradedEntity: TaskEntity = {
-            id: entity.id,
-            title: entity.title,
-            description: entity.description,
+            ...entity,
             status: status
         }
-        console.log('look',upgradedEntity)
         this.tasks[index] = upgradedEntity
-        console.log('look2',this.tasks)
-        console.log(taskEntityToUpdateDto(upgradedEntity))
-        return taskEntityToUpdateDto(upgradedEntity)
+        return upgradedEntity
     }
 
-    getFilteredTask(filterTask: GetFilterTaskDto) : TaskDto[] {
+    getFilteredTask(filterTask: GetFilterTaskDto) : TaskEntity[] {
         const {status, search } = filterTask;
 
         if(status) {
             return this.tasks.filter(entity => entity.status === status)
-                             .map(entity => taskEntityToTaskDto(entity))
+                             .map(entity =>entity)
         }
         if(search) {
-            return this.tasks.filter(entity => entity.title.trim().toLocaleLowerCase() === search.trim().toLocaleLowerCase()
-                                    || entity.description.trim().toLocaleLowerCase() === search.trim().toLocaleLowerCase())
-                             .map(entity => taskEntityToTaskDto(entity))
+            return this.tasks.filter(entity =>
+                entity.title.trim().toLocaleLowerCase() === search.trim().toLocaleLowerCase()
+                || entity.description.trim().toLocaleLowerCase() === search.trim().toLocaleLowerCase())
         }
         return [];
     }
