@@ -1,6 +1,6 @@
 import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from '@nestjs/common';
 import {TasksService} from "../tasks-service/tasks.service";
-import {TaskStatus} from "../model/entity/TaskEntity";
+import {TaskStatus} from "../model/Task";
 import {CreateTaskDto} from "../model/dto/CreateTaskDto";
 import {taskDtoToEntity, taskEntityToCreateDto, taskEntityToTaskDto} from "../mapper/TaskMapper";
 import {GetFilterTaskDto} from "../model/dto/GetFilterTaskDto";

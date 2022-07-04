@@ -1,5 +1,5 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
-import {TaskEntity, TaskStatus} from "../model/entity/TaskEntity";
+import {Task, TaskStatus} from "../model/Task";
 import {CreateTaskDto} from "../model/dto/CreateTaskDto";
 import {taskDtoToEntity, taskEntityToCreateDto} from "../mapper/TaskMapper";
 import {GetFilterTaskDto} from "../model/dto/GetFilterTaskDto";
@@ -9,26 +9,26 @@ import {IsEnum} from "class-validator";
 export class TasksService {
 
     // AUTO GENERATION ID : install uuid package npm install uuid
-    private tasks : TaskEntity[] = []
+    private tasks : Task[] = []
 
-    saveTask( task : TaskEntity ) : TaskEntity {
+    saveTask( task : Task ) : Task {
 
         this.tasks.push(task)
         return task
     }
 
-    saveAllTasks( tasks: CreateTaskDto[] ) : TaskEntity[] {
+    saveAllTasks( tasks: CreateTaskDto[] ) : Task[] {
         tasks.forEach(dto => this.tasks.push(taskDtoToEntity(dto)))
         return this.tasks
     }
 
-    getTask( id : string ) : TaskEntity {
+    getTask( id : string ) : Task {
         const temp = this.tasks.find(task => task.id === id)
         if(!temp) throw new NotFoundException()
         else return temp
     }
 
-    getAllTasks() : TaskEntity[] {
+    getAllTasks() : Task[] {
         return this.tasks
     }
 
@@ -38,10 +38,10 @@ export class TasksService {
     }
 
 
-    updateTaskStatus(id: string, status : TaskStatus) : TaskEntity {
-        const entity: TaskEntity = this.getTask(id)
+    updateTaskStatus(id: string, status : TaskStatus) : Task {
+        const entity: Task = this.getTask(id)
         const index = this.tasks.indexOf(entity)
-        const upgradedEntity: TaskEntity = {
+        const upgradedEntity: Task = {
             ...entity,
             status: status
         }
@@ -49,7 +49,7 @@ export class TasksService {
         return upgradedEntity
     }
 
-    getFilteredTask(filterTask: GetFilterTaskDto) : TaskEntity[] {
+    getFilteredTask(filterTask: GetFilterTaskDto) : Task[] {
         const {status, search } = filterTask;
 
         if(status) {

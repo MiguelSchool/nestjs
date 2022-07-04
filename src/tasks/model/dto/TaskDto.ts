@@ -1,4 +1,4 @@
-import {TaskStatus} from "../entity/TaskEntity";
+import {TaskStatus} from "../Task";
 import {isEnum, IsEnum, IsNotEmpty} from "class-validator";
 
 export class TaskDto {

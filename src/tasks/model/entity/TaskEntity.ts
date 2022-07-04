@@ -1,14 +1,17 @@
-export interface TaskEntity {
-    id?: string,
-    title: string,
-    description: string,
-    status?: TaskStatus
-}
+import {Task, TaskStatus} from "../Task";
+import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-export enum TaskStatus {
-    OPEN = "open",
-    IN_PROGRESS = "in_progress",
-    DONE = "done"
-}
+@Entity()
+export class TaskEntity extends BaseEntity implements Task {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-// for connecting to a database we need npm install typeorm @nestjs/typeorm pg
+    @Column()
+    title: string;
+
+    @Column()
+    description: string;
+
+    @Column()
+    status: TaskStatus;
+}

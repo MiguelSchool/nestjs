@@ -1,4 +1,4 @@
-import {TaskStatus} from "../entity/TaskEntity";
+import {TaskStatus} from "../Task";
 import {IsEnum, IsOptional, IsString} from "class-validator";
 
 export class GetFilterTaskDto {

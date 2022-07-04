@@ -1,4 +1,4 @@
-import {TaskEntity} from "../model/entity/TaskEntity";
+import {Task} from "../model/Task";
 import {CreateTaskDto} from "../model/dto/CreateTaskDto";
 import {randomUUID} from "crypto";
 import {TaskDto} from "../model/dto/TaskDto";
@@ -11,7 +11,7 @@ export const taskEntityToTaskDto : (TaskEntity) => TaskDto = (entity) =>
     new TaskDto(entity.title,entity.description, entity.status)
 
 // dtos to entities
-export const taskDtoToEntity : (TaskDto) => TaskEntity = (dto) => {
+export const taskDtoToEntity : (TaskDto) => Task = (dto) => {
     dto.id = randomUUID()
     console.log('id: ',dto.id)
     return { title: dto.title, description: dto.description }
